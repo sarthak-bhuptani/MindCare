@@ -49,11 +49,19 @@ app.use(express.json());
 const MONGODB_URI = process.env.MONGODB_URI;
 
 const connectDB = async () => {
+    // If already connected, do nothing
     if (mongoose.connection.readyState === 1) return;
 
+    // If currently connecting, wait for it to finish
+    if (mongoose.connection.readyState === 2) {
+        return new Promise((resolve, reject) => {
+            mongoose.connection.once('connected', resolve);
+            mongoose.connection.once('error', reject);
+        });
+    }
+
     if (!MONGODB_URI) {
-        console.error('❌ MONGODB_URI is not defined in environment variables!');
-        return;
+        throw new Error('MONGODB_URI is not defined in environment variables');
     }
 
     try {
@@ -73,7 +81,11 @@ const dbMiddleware = async (req, res, next) => {
         await connectDB();
         next();
     } catch (err) {
-        res.status(500).json({ message: "Database connection failed", error: err.message });
+        res.status(500).json({
+            message: "Database connection failed",
+            error: err.message,
+            tip: "Check your MongoDB Atlas Network Access (IP Whitelist) and if your URI is correct."
+        });
     }
 };
 
