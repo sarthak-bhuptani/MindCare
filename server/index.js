@@ -86,8 +86,31 @@ app.get('/api/health', (req, res) => {
         status: 'ok',
         database: states[state] || 'unknown',
         mongodb_uri_exists: !!process.env.MONGODB_URI,
-        env: process.env.NODE_ENV || 'development'
+        env: process.env.NODE_ENV || 'production'
     });
+});
+
+// Diagnostic route for DB connection
+app.get('/api/test-db', async (req, res) => {
+    try {
+        if (!process.env.MONGODB_URI) {
+            return res.status(500).json({ error: 'MONGODB_URI is missing' });
+        }
+
+        // Try a fresh connection test
+        const testConn = await mongoose.createConnection(process.env.MONGODB_URI, {
+            serverSelectionTimeoutMS: 5000
+        }).asPromise();
+
+        await testConn.close();
+        res.json({ success: true, message: 'Database is reachable!' });
+    } catch (err) {
+        res.status(500).json({
+            success: false,
+            error: err.message,
+            tip: 'Check your MongoDB Atlas Network Access (IP Whitelist) and credentials.'
+        });
+    }
 });
 
 // Schemas
