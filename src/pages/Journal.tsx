@@ -32,9 +32,9 @@ interface JournalEntry {
   };
 }
 
-const moodOptions = ["Great", "Good", "Okay", "Low", "Difficult"];
+import { API_ENDPOINTS } from "@/lib/api-config";
 
-const API_URL = "http://localhost:5000/api/journal";
+const moodOptions = ["Great", "Good", "Okay", "Low", "Difficult"];
 
 const Journal = () => {
   const [entries, setEntries] = useState<JournalEntry[]>([]);
@@ -58,7 +58,7 @@ const Journal = () => {
     if (!token) return;
     try {
       setIsLoading(true);
-      const response = await fetch(API_URL, {
+      const response = await fetch(API_ENDPOINTS.JOURNAL, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
@@ -94,7 +94,7 @@ const Journal = () => {
     }
 
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetch(API_ENDPOINTS.JOURNAL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -129,7 +129,7 @@ const Journal = () => {
 
   const handleDeleteEntry = async (id: string) => {
     try {
-      const response = await fetch(`${API_URL}/${id}`, {
+      const response = await fetch(`${API_ENDPOINTS.JOURNAL}/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
@@ -146,7 +146,7 @@ const Journal = () => {
   const handleEditEntry = async (entry: JournalEntry) => {
     if (editingId === entry.id) {
       try {
-        const response = await fetch(`${API_URL}/${entry.id}`, {
+        const response = await fetch(`${API_ENDPOINTS.JOURNAL}/${entry.id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',

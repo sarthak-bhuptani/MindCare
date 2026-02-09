@@ -11,6 +11,7 @@ import Footer from "@/components/Footer";
 import { motion } from "framer-motion";
 import { Mail, Lock, User, ArrowRight, Sparkles } from "lucide-react";
 import LoginAvatar from "@/components/LoginAvatar";
+import { API_ENDPOINTS } from "@/lib/api-config";
 
 const Register = () => {
     const [name, setName] = useState("");
@@ -26,7 +27,7 @@ const Register = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch("http://localhost:5000/api/auth/register", {
+            const response = await fetch(`${API_ENDPOINTS.AUTH}/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, email, password }),
