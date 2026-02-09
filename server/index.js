@@ -51,6 +51,17 @@ mongoose.connect(MONGODB_URI)
         console.error('❌ MongoDB connection error:', err.message);
     });
 
+// Root route for deployment confirmation
+app.get('/', (req, res) => {
+    res.send(`
+        <div style="font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: #0f172a; color: white;">
+            <h1 style="color: #38bdf8;">🧠 MindCare API</h1>
+            <p>The backend is successfully running on Vercel!</p>
+            <p style="color: #94a3b8;">Health check: <a href="/api/health" style="color: #38bdf8;">/api/health</a></p>
+        </div>
+    `);
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
     res.json({
