@@ -80,4 +80,4 @@ MindCare follows a **Modern Zen** aesthetic:
 *   **Micro-animations**: Smooth transitions using Framer Motion for a premium feel.
 
 ---
-Created with ❤️ by [Sarthak Bhuptani](https://github.com/sarthak-bhuptani)
+Created by [Sarthak Bhuptani](https://github.com/sarthak-bhuptani)
