@@ -1,2 +1,0 @@
-- [x] Update the Groq API model in chatService.ts from "llama3-8b-8192" to "llama3-70b-8192" to fix the decommissioned model error.
-- [x] Fix the DOM nesting warning in Navbar.tsx by using asChild prop for NavigationMenuLink components to avoid nested <a> tags.
