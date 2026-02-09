@@ -1,60 +1,81 @@
-# Welcome to project
+# 🧠 MindCare: Your Digital Sanctuary for Mental Well-being
 
-## Project info
+MindCare is a premium, immersive mental health platform designed to help users find balance, focus, and peace in a fast-paced digital world. Built with a focus on "Modern Zen" design, it offers a suite of cognitive tools and therapeutic exercises.
 
-## How can I edit this code?
+![MindCare Header](https://raw.githubusercontent.com/sarthak-bhuptani/MindCare/main/public/placeholder.svg)
 
-There are several ways of editing your application.
+## ✨ Core Features
 
-**Use your preferred IDE**
+### 🎮 Mind Games (Cognitive Refinement)
+Immersive, low-friction exercises designed to quiet the mind and heighten focus.
+*   **Memory Match**: Classic pattern matching to anchor focus.
+*   **Light Painter**: Creative flow exercise using glowing trails.
+*   **Affirmation Search**: Positive reinforcement through word discovery.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### 🌬️ Breathing Exercises
+Responsive, guided breathing modules with dynamic visual feedback.
+*   Includes **Box Breathing**, **4-7-8 Technique**, and **Coherent Breathing**.
+*   Real-time visual guides that scale across all devices.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### 💬 Serene AI Chat
+A compassionate AI assistant powered by Groq (Llama 3.3) to provide supportive guidance and a listening ear whenever you need it.
 
-Follow these steps:
+### 📖 Mood Journal
+Track your emotional journey with a clean, intuitive journaling system.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## 🛠️ Tech Stack
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+*   **Frontend**: React (Vite), TypeScript, Tailwind CSS, Framer Motion, Lucide React, Shadcn UI.
+*   **Backend**: Node.js, Express.
+*   **Database**: MongoDB Atlas.
+*   **AI**: Groq SDK (Llama 3.3 70B).
+*   **Authentication**: JWT-based secure login and registration.
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 🚀 Getting Started
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+### Prerequisites
+*   Node.js (v18+)
+*   MongoDB Atlas Account
+*   Groq API Key
 
-**Edit a file directly in GitHub**
+### Installation
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+1.  **Clone the Repository**
+    ```bash
+    git clone https://github.com/sarthak-bhuptani/MindCare.git
+    cd MindCare
+    ```
 
-**Use GitHub Codespaces**
+2.  **Install Dependencies**
+    ```bash
+    # Root dependencies
+    npm install
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+    # Server dependencies
+    cd server
+    npm install
+    cd ..
+    ```
 
-## What technologies are used for this project?
+3.  **Environment Setup**
+    Create a `.env` file in the root:
+    ```env
+    VITE_GROQ_API_KEY=your_key_here
+    MONGODB_URI=your_mongodb_uri
+    JWT_SECRET=your_jwt_secret
+    ```
 
-This project is built with:
+4.  **Run the Application**
+    ```bash
+    npm run fullstack
+    ```
+    The app will be available at `http://localhost:5173`.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 🎨 Design Philosophy
+MindCare follows a **Modern Zen** aesthetic:
+*   **Glassmorphism**: Dual-layer glows and high-transparency blur effects.
+*   **Vibrant Gradients**: Carefully curated HSL palettes for calmness and energy.
+*   **Micro-animations**: Smooth transitions using Framer Motion for a premium feel.
 
-
-Yes it is!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+---
+Created with ❤️ by [Sarthak Bhuptani](https://github.com/sarthak-bhuptani)
