@@ -37,11 +37,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         localStorage.setItem('user', JSON.stringify(newUser));
     };
 
+    const navigate = useNavigate();
+
     const logout = () => {
         setToken(null);
         setUser(null);
         localStorage.removeItem('token');
         localStorage.removeItem('user');
+        navigate('/');
     };
 
     return (
