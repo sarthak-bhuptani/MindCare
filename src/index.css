@@ -1,0 +1,174 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 190 100% 98%;
+    --foreground: 200 50% 20%;
+
+    /* Smooth transitions for variables */
+    --transition-speed: 0.8s;
+
+    --card: 0 0% 100%;
+    --card-foreground: 200 50% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 200 50% 20%;
+
+    --primary: 196 100% 46%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 175 84% 38%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 210 20% 94%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 175 84% 94%;
+    --accent-foreground: 175 84% 30%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 196 100% 46%;
+
+    --radius: 1.5rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 200 50% 10%;
+    --foreground: 210 40% 98%;
+
+    --card: 200 50% 13%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 200 50% 13%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 196 100% 46%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 175 84% 38%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 175 84% 24%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+    transition: background-color var(--transition-speed) ease,
+      border-color var(--transition-speed) ease,
+      color var(--transition-speed) ease,
+      fill var(--transition-speed) ease,
+      stroke var(--transition-speed) ease;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  .blob {
+    border-radius: 71% 29% 65% 35% / 51% 54% 46% 49%;
+  }
+
+  .blob-animation {
+    animation: morph 8s ease-in-out infinite;
+  }
+
+  @keyframes morph {
+    0% {
+      border-radius: 71% 29% 65% 35% / 51% 54% 46% 49%;
+    }
+
+    25% {
+      border-radius: 35% 65% 31% 69% / 57% 59% 41% 43%;
+    }
+
+    50% {
+      border-radius: 63% 37% 56% 44% / 35% 51% 49% 65%;
+    }
+
+    75% {
+      border-radius: 46% 54% 46% 54% / 63% 47% 53% 37%;
+    }
+
+    100% {
+      border-radius: 71% 29% 65% 35% / 51% 54% 46% 49%;
+    }
+  }
+}
+
+.glass-card {
+  @apply relative backdrop-blur-md bg-white/20 border border-white/30 shadow-lg rounded-3xl overflow-hidden;
+  transform-style: preserve-3d;
+}
+
+.glass-card::before {
+  content: "";
+  @apply absolute inset-0 bg-gradient-to-br from-white/30 to-white/10 rounded-3xl;
+  transform: translateZ(-1px);
+}
+
+/* Modern Navbar Adjustments */
+.nav-floating {
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.dropdown-anim {
+  animation: dropdown-fade-in 0.2s ease-out;
+}
+
+@keyframes dropdown-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Ensure smooth scrolling across the entire app */
+html {
+  scroll-behavior: smooth;
+}
+
+@layer utilities {
+  .blob-animation-slow {
+    animation: morph 12s ease-in-out infinite reverse;
+  }
+
+  .animate-spin-slow {
+    animation: spin 8s linear infinite;
+  }
+}
