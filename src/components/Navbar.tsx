@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Moon, Sun, BookHeart, MessageSquare, HeartPulse, Calendar, Wind, Gamepad2, LogOut, User as UserIcon, ChevronDown } from "lucide-react";
+import { Menu, X, BookHeart, MessageSquare, HeartPulse, Calendar, Wind, Gamepad2, LogOut, User as UserIcon, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -18,14 +18,8 @@ import { SOSModal } from "@/components/SOSModal";
 const Navbar = () => {
   const { user, logout, isAuthenticated } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    document.documentElement.classList.toggle("dark");
-  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -170,9 +164,6 @@ const Navbar = () => {
               </Link>
             </div>
           )}
-          <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="rounded-xl hover:bg-accent/50 transition-colors">
-            {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
-          </Button>
         </div>
 
         {/* Mobile Toggle */}
@@ -215,9 +206,6 @@ const Navbar = () => {
               <div className="flex flex-col gap-2 relative z-10">
                 <div className="flex items-center justify-between px-2 mb-4">
                   <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Menu</span>
-                  <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="h-10 w-10 rounded-2xl bg-primary/5 hover:bg-primary/10">
-                    {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
-                  </Button>
                 </div>
 
                 <div className="grid grid-cols-1 gap-1">
