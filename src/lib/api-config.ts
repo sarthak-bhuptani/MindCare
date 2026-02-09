@@ -3,7 +3,7 @@
 // On your local machine, it defaults to localhost:5000.
 // When you deploy, you can change this to your production backend URL.
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_BASE_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000").replace(/\/$/, "");
 
 export const API_ENDPOINTS = {
     AUTH: `${API_BASE_URL}/api/auth`,
