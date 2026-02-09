@@ -175,16 +175,16 @@ const Navbar = () => {
         {/* Mobile Toggle */}
         <div className="lg:hidden flex items-center gap-2">
           {isAuthenticated && (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2">
               <SOSModal />
               <Link to="/chat">
-                <Button size="icon" className="rounded-xl bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/10">
+                <Button size="icon" className="h-9 w-9 rounded-xl bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/10">
                   <MessageSquare size={18} />
                 </Button>
               </Link>
             </div>
           )}
-          <Button variant="ghost" size="icon" onClick={setIsOpen && (() => setIsOpen(!isOpen))} className="rounded-xl bg-accent/30 hover:bg-accent/50 transition-colors">
+          <Button variant="ghost" size="icon" onClick={() => setIsOpen(!isOpen)} className="h-9 w-9 rounded-xl bg-accent/30 hover:bg-accent/50 transition-colors">
             {isOpen ? <X size={20} /> : <Menu size={20} />}
           </Button>
         </div>
@@ -197,40 +197,60 @@ const Navbar = () => {
             initial={{ opacity: 0, scale: 0.95, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            className="fixed top-28 left-4 right-4 z-40 lg:hidden p-4 rounded-3xl border border-primary/10 bg-background/80 backdrop-blur-2xl shadow-3xl pointer-events-auto"
+            className="fixed top-[5.5rem] left-4 right-4 z-40 lg:hidden p-4 rounded-3xl border border-primary/10 bg-background/95 backdrop-blur-2xl shadow-3xl pointer-events-auto"
           >
-            <div className="flex flex-col gap-2">
-              <Link to="/" className="p-4 rounded-2xl hover:bg-primary/10 flex items-center gap-3 transition-colors">
-                <HeartPulse size={18} className="text-primary" /> <span className="font-medium">Home</span>
+            <div className="flex flex-col gap-1">
+              <Link to="/" className={cn("p-4 rounded-2xl flex items-center gap-3 transition-colors", isActive("/") ? "bg-primary/10 text-primary" : "hover:bg-primary/5")}>
+                <HeartPulse size={18} /> <span className="font-medium">Home</span>
               </Link>
+              <Link to="/resources" className={cn("p-4 rounded-2xl flex items-center gap-3 transition-colors", isActive("/resources") ? "bg-primary/10 text-primary" : "hover:bg-primary/5")}>
+                <BookHeart size={18} /> <span className="font-medium">Resources</span>
+              </Link>
+
               {isAuthenticated ? (
                 <>
-                  <Link to="/chat" className="p-4 rounded-2xl bg-gradient-to-r from-primary to-secondary text-white flex items-center gap-3 shadow-lg shadow-primary/10">
-                    <MessageSquare size={18} /> <span className="font-medium">AI Chat Chat</span>
+                  <Link to="/chat" className="p-4 rounded-2xl bg-gradient-to-r from-primary to-secondary text-white flex items-center gap-3 shadow-lg shadow-primary/20 my-1">
+                    <MessageSquare size={18} /> <span className="font-medium">AI Therapy Chat</span>
                   </Link>
-                  <Link to="/journal" className="p-4 rounded-2xl hover:bg-primary/10 flex items-center gap-3 transition-colors">
-                    <BookHeart size={18} className="text-primary" /> <span className="font-medium">Mood Journal</span>
-                  </Link>
-                  <Link to="/breathing" className="p-4 rounded-2xl hover:bg-primary/10 flex items-center gap-3 transition-colors">
-                    <Wind size={18} className="text-primary" /> <span className="font-medium">Breathing</span>
-                  </Link>
-                  <Link to="/mindgame" className="p-4 rounded-2xl hover:bg-primary/10 flex items-center gap-3 transition-colors">
-                    <Gamepad2 size={18} className="text-primary" /> <span className="font-medium">Mind Games</span>
-                  </Link>
-                  <div className="border-t border-primary/5 mt-2 pt-2">
-                    <div className="p-4 flex items-center gap-3 text-primary/70 font-bold text-xs uppercase tracking-widest">
-                      <UserIcon size={18} /> {user?.name}
+                  <div className="grid grid-cols-2 gap-1 px-1 py-1">
+                    <Link to="/journal" className={cn("p-4 rounded-2xl flex flex-col items-center gap-2 transition-colors", isActive("/journal") ? "bg-pink-500/10 text-pink-500" : "bg-primary/5 hover:bg-primary/10")}>
+                      <BookHeart size={20} /> <span className="text-xs font-semibold">Journal</span>
+                    </Link>
+                    <Link to="/breathing" className={cn("p-4 rounded-2xl flex flex-col items-center gap-2 transition-colors", isActive("/breathing") ? "bg-blue-500/10 text-blue-500" : "bg-primary/5 hover:bg-primary/10")}>
+                      <Wind size={20} /> <span className="text-xs font-semibold">Breathing</span>
+                    </Link>
+                    <Link to="/mindgame" className={cn("p-4 rounded-2xl flex flex-col items-center gap-2 transition-colors col-span-2", isActive("/mindgame") ? "bg-purple-500/10 text-purple-500" : "bg-primary/5 hover:bg-primary/10")}>
+                      <Gamepad2 size={20} /> <span className="text-xs font-semibold">Mind Games</span>
+                    </Link>
+                  </div>
+                  <div className="mt-2 pt-2 border-t border-primary/5">
+                    <div className="flex items-center justify-between p-4 px-5">
+                      <div className="flex items-center gap-3 text-muted-foreground">
+                        <UserIcon size={18} className="text-primary" />
+                        <span className="font-bold text-xs uppercase tracking-widest">{user?.name}</span>
+                      </div>
+                      <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="h-10 w-10 rounded-xl bg-accent/30">
+                        {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+                      </Button>
                     </div>
-                    <button onClick={logout} className="w-full text-left p-4 rounded-2xl text-destructive hover:bg-destructive/10 flex items-center gap-3 transition-colors">
-                      <LogOut size={18} /> <span className="font-medium">Logout</span>
+                    <button onClick={logout} className="w-full mt-1 p-4 rounded-2xl text-destructive bg-destructive/5 hover:bg-destructive/10 flex items-center justify-center gap-3 transition-colors font-semibold">
+                      <LogOut size={18} /> Logout
                     </button>
                   </div>
                 </>
               ) : (
-                <div className="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-border/50">
-                  <Link to="/login" className="p-3 rounded-2xl border border-border text-center">Login</Link>
-                  <Link to="/register" className="p-3 rounded-2xl bg-primary text-white text-center font-medium">Sign Up</Link>
-                </div>
+                <>
+                  <div className="p-4 flex items-center justify-between bg-primary/5 rounded-2xl my-1">
+                    <span className="text-sm font-medium text-muted-foreground">Appearance</span>
+                    <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="h-10 w-10 rounded-xl bg-accent/30">
+                      {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+                    </Button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-primary/5">
+                    <Link to="/login" className="p-4 rounded-2xl border border-border text-center font-semibold hover:bg-accent/50 transition-colors">Login</Link>
+                    <Link to="/register" className="p-4 rounded-2xl bg-primary text-white text-center font-bold shadow-lg shadow-primary/20">Sign Up</Link>
+                  </div>
+                </>
               )}
             </div>
           </motion.div>
