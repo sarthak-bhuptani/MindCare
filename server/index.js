@@ -48,13 +48,19 @@ app.use(express.json());
 // MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI;
 
-mongoose.connect(MONGODB_URI)
-    .then(() => {
-        console.log('✅ Connected to MongoDB');
+if (!MONGODB_URI) {
+    console.error('❌ MONGODB_URI is not defined in environment variables!');
+} else {
+    mongoose.connect(MONGODB_URI, {
+        serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
     })
-    .catch((err) => {
-        console.error('❌ MongoDB connection error:', err.message);
-    });
+        .then(() => {
+            console.log('✅ Connected to MongoDB');
+        })
+        .catch((err) => {
+            console.error('❌ MongoDB connection error:', err.message);
+        });
+}
 
 // Root route for deployment confirmation
 app.get('/', (req, res) => {
@@ -69,9 +75,18 @@ app.get('/', (req, res) => {
 
 // Health check
 app.get('/api/health', (req, res) => {
+    const state = mongoose.connection.readyState;
+    const states = {
+        0: 'disconnected',
+        1: 'connected',
+        2: 'connecting',
+        3: 'disconnecting'
+    };
     res.json({
         status: 'ok',
-        database: mongoose.connection.readyState === 1 ? 'connected' : 'disconnected'
+        database: states[state] || 'unknown',
+        mongodb_uri_exists: !!process.env.MONGODB_URI,
+        env: process.env.NODE_ENV || 'development'
     });
 });
 
