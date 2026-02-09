@@ -66,22 +66,25 @@ const Navbar = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         className={cn(
-          "pointer-events-auto transition-all duration-500 ease-in-out",
-          "flex items-center gap-4 px-6 py-3 rounded-2xl",
-          "border border-border/50 shadow-2xl backdrop-blur-xl",
+          "pointer-events-auto transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]",
+          "flex items-center gap-4 px-8 py-3 rounded-full",
+          "border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.12)] backdrop-blur-2xl",
           scrolled
-            ? "bg-background/80 w-full max-w-5xl translate-y-2 border-primary/20"
-            : "bg-background/40 w-full max-w-7xl"
+            ? "bg-white/70 dark:bg-black/70 w-full max-w-4xl py-2 px-6 translate-y-2 border-primary/20 shadow-primary/5"
+            : "bg-white/30 dark:bg-black/30 w-full max-w-6xl"
         )}
       >
         <Link to="/" className="flex items-center space-x-2 shrink-0 group">
           <div className="p-2 bg-primary/10 rounded-xl group-hover:bg-primary/20 transition-colors">
             <HeartPulse size={24} className="text-primary" />
           </div>
-          <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent hidden sm:block">
+          <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent sm:block">
             MindCare
           </span>
         </Link>
+
+        {/* Flexible spacer to push items to the right on mobile */}
+        <div className="flex-1 lg:hidden" />
 
         {/* Desktop Links */}
         <div className="hidden lg:flex items-center gap-1 flex-1 justify-center px-4">
@@ -193,67 +196,89 @@ const Navbar = () => {
       {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: -20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            className="fixed top-[5.5rem] left-4 right-4 z-40 lg:hidden p-4 rounded-3xl border border-primary/10 bg-background/95 backdrop-blur-2xl shadow-3xl pointer-events-auto"
-          >
-            <div className="flex flex-col gap-1">
-              <Link to="/" className={cn("p-4 rounded-2xl flex items-center gap-3 transition-colors", isActive("/") ? "bg-primary/10 text-primary" : "hover:bg-primary/5")}>
-                <HeartPulse size={18} /> <span className="font-medium">Home</span>
-              </Link>
-              <Link to="/resources" className={cn("p-4 rounded-2xl flex items-center gap-3 transition-colors", isActive("/resources") ? "bg-primary/10 text-primary" : "hover:bg-primary/5")}>
-                <BookHeart size={18} /> <span className="font-medium">Resources</span>
-              </Link>
+          <>
+            {/* Backdrop for focus */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              className="fixed inset-0 bg-black/20 backdrop-blur-sm z-30 lg:hidden"
+            />
 
-              {isAuthenticated ? (
-                <>
-                  <Link to="/chat" className="p-4 rounded-2xl bg-gradient-to-r from-primary to-secondary text-white flex items-center gap-3 shadow-lg shadow-primary/20 my-1">
-                    <MessageSquare size={18} /> <span className="font-medium">AI Therapy Chat</span>
+            <motion.div
+              initial={{ opacity: 0, y: -20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.95 }}
+              className="fixed top-24 left-4 right-4 z-40 lg:hidden p-5 rounded-[2.5rem] border border-white/20 bg-background/95 backdrop-blur-3xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)] pointer-events-auto overflow-hidden"
+            >
+              <div className="flex flex-col gap-2 relative z-10">
+                <div className="flex items-center justify-between px-2 mb-4">
+                  <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Menu</span>
+                  <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="h-10 w-10 rounded-2xl bg-primary/5 hover:bg-primary/10">
+                    {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+                  </Button>
+                </div>
+
+                <div className="grid grid-cols-1 gap-1">
+                  <Link to="/" className={cn("p-4 rounded-2xl flex items-center gap-4 transition-all active:scale-[0.98]", isActive("/") ? "bg-primary text-white" : "hover:bg-primary/5 text-muted-foreground")}>
+                    <HeartPulse size={20} /> <span className="font-semibold">Home Dashboard</span>
                   </Link>
-                  <div className="grid grid-cols-2 gap-1 px-1 py-1">
-                    <Link to="/journal" className={cn("p-4 rounded-2xl flex flex-col items-center gap-2 transition-colors", isActive("/journal") ? "bg-pink-500/10 text-pink-500" : "bg-primary/5 hover:bg-primary/10")}>
-                      <BookHeart size={20} /> <span className="text-xs font-semibold">Journal</span>
-                    </Link>
-                    <Link to="/breathing" className={cn("p-4 rounded-2xl flex flex-col items-center gap-2 transition-colors", isActive("/breathing") ? "bg-blue-500/10 text-blue-500" : "bg-primary/5 hover:bg-primary/10")}>
-                      <Wind size={20} /> <span className="text-xs font-semibold">Breathing</span>
-                    </Link>
-                    <Link to="/mindgame" className={cn("p-4 rounded-2xl flex flex-col items-center gap-2 transition-colors col-span-2", isActive("/mindgame") ? "bg-purple-500/10 text-purple-500" : "bg-primary/5 hover:bg-primary/10")}>
-                      <Gamepad2 size={20} /> <span className="text-xs font-semibold">Mind Games</span>
-                    </Link>
-                  </div>
-                  <div className="mt-2 pt-2 border-t border-primary/5">
-                    <div className="flex items-center justify-between p-4 px-5">
-                      <div className="flex items-center gap-3 text-muted-foreground">
-                        <UserIcon size={18} className="text-primary" />
-                        <span className="font-bold text-xs uppercase tracking-widest">{user?.name}</span>
+                  <Link to="/resources" className={cn("p-4 rounded-2xl flex items-center gap-4 transition-all active:scale-[0.98]", isActive("/resources") ? "bg-primary text-white" : "hover:bg-primary/5 text-muted-foreground")}>
+                    <BookHeart size={20} /> <span className="font-semibold">Mindfulness Hub</span>
+                  </Link>
+                </div>
+
+                {isAuthenticated ? (
+                  <div className="mt-4 pt-4 border-t border-primary/10 flex flex-col gap-3">
+                    <Link to="/chat" className="p-4 rounded-3xl bg-gradient-to-br from-primary to-blue-600 text-white flex items-center justify-between shadow-xl shadow-primary/20">
+                      <div className="flex items-center gap-3">
+                        <MessageSquare size={20} /> <span className="font-bold text-lg">AI Therapy</span>
                       </div>
-                      <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="h-10 w-10 rounded-xl bg-accent/30">
-                        {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+                      <div className="bg-white/20 p-1 px-2 rounded-lg text-[10px] font-bold uppercase tracking-tighter">Live</div>
+                    </Link>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <Link to="/journal" className="p-4 rounded-2xl bg-zinc-100 dark:bg-zinc-800/50 flex flex-col gap-2">
+                        <BookHeart size={20} className="text-pink-500" /> <span className="text-xs font-bold">Journal</span>
+                      </Link>
+                      <Link to="/breathing" className="p-4 rounded-2xl bg-zinc-100 dark:bg-zinc-800/50 flex flex-col gap-2">
+                        <Wind size={20} className="text-blue-500" /> <span className="text-xs font-bold">Breathing</span>
+                      </Link>
+                    </div>
+
+                    <div className="mt-4 p-4 rounded-3xl bg-primary/5 border border-primary/10">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="h-10 w-10 rounded-full bg-primary/20 flex items-center justify-center font-bold text-primary">
+                          {user?.name?.[0]}
+                        </div>
+                        <div>
+                          <p className="text-xs font-bold opacity-50 uppercase tracking-widest">Active Member</p>
+                          <p className="font-bold text-sm">{user?.name}</p>
+                        </div>
+                      </div>
+                      <Button onClick={logout} variant="outline" className="w-full rounded-2xl border-destructive/20 text-destructive hover:bg-destructive/5 font-bold">
+                        <LogOut size={16} className="mr-2" /> End Session
                       </Button>
                     </div>
-                    <button onClick={logout} className="w-full mt-1 p-4 rounded-2xl text-destructive bg-destructive/5 hover:bg-destructive/10 flex items-center justify-center gap-3 transition-colors font-semibold">
-                      <LogOut size={18} /> Logout
-                    </button>
                   </div>
-                </>
-              ) : (
-                <>
-                  <div className="p-4 flex items-center justify-between bg-primary/5 rounded-2xl my-1">
-                    <span className="text-sm font-medium text-muted-foreground">Appearance</span>
-                    <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="h-10 w-10 rounded-xl bg-accent/30">
-                      {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
-                    </Button>
+                ) : (
+                  <div className="mt-6 flex flex-col gap-3">
+                    <Link to="/register">
+                      <Button className="w-full h-14 rounded-3xl bg-primary text-white font-bold text-lg shadow-2xl shadow-primary/30">
+                        Join MindCare
+                      </Button>
+                    </Link>
+                    <Link to="/login">
+                      <Button variant="ghost" className="w-full h-14 rounded-3xl border border-primary/10 font-semibold text-muted-foreground">
+                        Sign In to Account
+                      </Button>
+                    </Link>
                   </div>
-                  <div className="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-primary/5">
-                    <Link to="/login" className="p-4 rounded-2xl border border-border text-center font-semibold hover:bg-accent/50 transition-colors">Login</Link>
-                    <Link to="/register" className="p-4 rounded-2xl bg-primary text-white text-center font-bold shadow-lg shadow-primary/20">Sign Up</Link>
-                  </div>
-                </>
-              )}
-            </div>
-          </motion.div>
+                )}
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </div>
