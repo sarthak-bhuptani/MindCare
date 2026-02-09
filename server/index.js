@@ -19,7 +19,7 @@ dotenv.config({ path: envPath });
 const app = express();
 const PORT = process.env.PORT || 5000;
 const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret';
-const GROQ_API_KEY = process.env.VITE_GROQ_API_KEY ? process.env.VITE_GROQ_API_KEY.trim() : "";
+const GROQ_API_KEY = (process.env.GROQ_API_KEY || process.env.VITE_GROQ_API_KEY || "").trim();
 
 // AI Client Initialization
 const aiClient = new OpenAI({

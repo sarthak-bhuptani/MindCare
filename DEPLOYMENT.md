@@ -19,9 +19,10 @@ We recommend using **Render** for a free and simple Node.js deployment.
     *   **Build Command**: `npm install`
     *   **Start Command**: `node index.js`
 3.  **Environment Variables**:
-    *   Go to the "Environment" tab in Render and add:
+    *   Go to the "Environment" tab in Vercel/Render and add:
         *   `MONGODB_URI`: Your full MongoDB connection string.
         *   `JWT_SECRET`: A strong random string for security.
+        *   `GROQ_API_KEY`: Your Groq API key (Required for Mood analysis).
 4.  **Wait for Deployment**: Render will give you a URL like `https://mindcare-backend.onrender.com`. Copy this!
 
 ---
