@@ -2,7 +2,9 @@
 
 MindCare is a premium, immersive mental health platform designed to help users find balance, focus, and peace in a fast-paced digital world. Built with a focus on "Modern Zen" design, it offers a suite of cognitive tools and therapeutic exercises.
 
-![MindCare Header](https://raw.githubusercontent.com/sarthak-bhuptani/MindCare/main/public/placeholder.svg)
+**🌐 Live Demo: [https://minddcare.netlify.app](https://minddcare.netlify.app)**
+
+![MindCare Banner](./public/og-image.png)
 
 ## ✨ Core Features
 
