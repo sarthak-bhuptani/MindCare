@@ -48,19 +48,37 @@ app.use(express.json());
 // MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI;
 
-if (!MONGODB_URI) {
-    console.error('❌ MONGODB_URI is not defined in environment variables!');
-} else {
-    mongoose.connect(MONGODB_URI, {
-        serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
-    })
-        .then(() => {
-            console.log('✅ Connected to MongoDB');
-        })
-        .catch((err) => {
-            console.error('❌ MongoDB connection error:', err.message);
+const connectDB = async () => {
+    if (mongoose.connection.readyState === 1) return;
+
+    if (!MONGODB_URI) {
+        console.error('❌ MONGODB_URI is not defined in environment variables!');
+        return;
+    }
+
+    try {
+        await mongoose.connect(MONGODB_URI, {
+            serverSelectionTimeoutMS: 5000,
         });
-}
+        console.log('✅ Connected to MongoDB');
+    } catch (err) {
+        console.error('❌ MongoDB connection error:', err.message);
+        throw err;
+    }
+};
+
+// Middleware to ensure DB is connected
+const dbMiddleware = async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    } catch (err) {
+        res.status(500).json({ message: "Database connection failed", error: err.message });
+    }
+};
+
+// Apply DB middleware to all /api routes
+app.use('/api', dbMiddleware);
 
 // Root route for deployment confirmation
 app.get('/', (req, res) => {
