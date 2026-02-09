@@ -204,6 +204,7 @@ app.post('/api/auth/register', async (req, res) => {
 app.post('/api/auth/login', async (req, res) => {
     const { email, password } = req.body;
     try {
+        console.log(`Login attempt for: ${email}`);
         const user = await User.findOne({ email });
         if (!user) return res.status(400).json({ message: 'User not found' });
 
@@ -214,7 +215,11 @@ app.post('/api/auth/login', async (req, res) => {
         res.json({ token, user: { id: user._id, name: user.name, email: user.email } });
     } catch (error) {
         console.error("Login Error:", error);
-        res.status(500).json({ message: error.message });
+        res.status(500).json({
+            message: "Login failed on server",
+            error: error.message,
+            state: mongoose.connection.readyState
+        });
     }
 });
 
