@@ -245,6 +245,13 @@ const Navbar = () => {
                       <Link to="/breathing" className="p-4 rounded-2xl bg-zinc-100 dark:bg-zinc-800/50 flex flex-col gap-2">
                         <Wind size={20} className="text-blue-500" /> <span className="text-xs font-bold">Breathing</span>
                       </Link>
+                      <Link to="/mindgame" className="p-4 rounded-2xl bg-zinc-100 dark:bg-zinc-800/50 flex items-center justify-between col-span-2">
+                        <div className="flex items-center gap-3">
+                          <Gamepad2 size={20} className="text-purple-500" />
+                          <span className="text-xs font-bold uppercase tracking-widest">Mind Games</span>
+                        </div>
+                        <ChevronDown size={14} className="rotate-[-90deg] opacity-30" />
+                      </Link>
                     </div>
 
                     <div className="mt-4 p-4 rounded-3xl bg-primary/5 border border-primary/10">
