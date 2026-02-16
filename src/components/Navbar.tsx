@@ -194,18 +194,20 @@ const Navbar = () => {
         {isOpen && (
           <>
             <motion.div
+              key="mobile-backdrop"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden"
+              className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 lg:hidden pointer-events-auto"
             />
             <motion.div
+              key="mobile-drawer"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="fixed top-0 bottom-0 right-0 z-50 w-full max-w-sm bg-background shadow-2xl border-l border-border/50 flex flex-col overflow-hidden lg:hidden"
+              className="fixed top-0 bottom-0 right-0 z-50 w-full max-w-sm bg-background shadow-2xl border-l border-border/50 flex flex-col overflow-hidden lg:hidden pointer-events-auto"
             >
               <div className="flex items-center justify-between p-6 border-b border-border/50 bg-background/50 backdrop-blur-xl">
                 <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Menu</span>
