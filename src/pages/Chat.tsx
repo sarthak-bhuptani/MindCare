@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, ArrowUp, Info, HeartPulse } from "lucide-react";
+import { Send, ArrowUp, Info, HeartPulse, Mic, MicOff, Volume2, X } from "lucide-react";
 import { toast } from "sonner";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -27,7 +27,69 @@ const Chat = () => {
   const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
+
+  // Initialize Speech Recognition
+  useEffect(() => {
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = false;
+      recognitionRef.current.lang = 'en-US';
+
+      recognitionRef.current.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        setInput(transcript);
+        handleSendMessage(transcript);
+      };
+
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
+      };
+
+      recognitionRef.current.onerror = (event: any) => {
+        console.error("Speech recognition error", event.error);
+        setIsListening(false);
+        toast.error("Could not hear you. Please try again.");
+      };
+    }
+  }, []);
+
+  const toggleListening = () => {
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+    } else {
+      if (recognitionRef.current) {
+        recognitionRef.current.start();
+        setIsListening(true);
+        toast.info("Listening... Speak now.");
+      } else {
+        toast.error("Speech recognition not supported in this browser.");
+      }
+    }
+  };
+
+  const speakText = (text: string) => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel(); // Stop any current speech
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 1;
+      utterance.pitch = 1;
+      utterance.onstart = () => setIsSpeaking(true);
+      utterance.onend = () => setIsSpeaking(false);
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  const stopSpeaking = () => {
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -37,11 +99,12 @@ const Chat = () => {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = async () => {
-    if (!input.trim() || isLoading) return;
+  const handleSendMessage = async (textOverride?: string) => {
+    const textToSend = textOverride || input;
+    if (!textToSend.trim() || isLoading) return;
 
     const userMessage: Message = {
-      content: input.trim(),
+      content: textToSend.trim(),
       isUser: true,
       timestamp: new Date(),
     };
@@ -68,6 +131,12 @@ const Chat = () => {
       };
 
       setMessages((prev) => [...prev, botMessage]);
+
+      // Auto-speak response if it was a voice message or speech is active
+      if (textOverride || isSpeaking) {
+        speakText(response);
+      }
+
     } catch (error) {
       console.error("Failed to send message:", error);
       toast.error("Failed to get a response. Please try again.");
@@ -86,8 +155,8 @@ const Chat = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <main className="flex-grow container px-4 sm:px-6 lg:px-8 pt-32 pb-8 md:pt-40 md:pb-12">
-        <div className="flex-grow bg-card/60 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-[2rem] shadow-2xl flex flex-col overflow-hidden max-h-[calc(100vh-10rem)]">
+      <main className="flex-grow container px-4 sm:px-6 lg:px-8 pt-24 pb-4 md:pt-40 md:pb-12 h-[calc(100dvh-5rem)] md:h-auto flex flex-col">
+        <div className="flex-grow bg-card/60 backdrop-blur-xl border border-white/20 dark:border-white/10 rounded-[2rem] shadow-2xl flex flex-col overflow-hidden h-full md:h-[calc(100vh-12rem)]">
           <div className="bg-white/40 dark:bg-black/20 p-4 border-b border-white/20 dark:border-white/10 flex justify-between items-center backdrop-blur-md">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-primary/10 rounded-xl">
@@ -124,16 +193,36 @@ const Chat = () => {
           <div className="p-4 md:p-6 bg-white/40 dark:bg-black/20 border-t border-white/20 dark:border-white/10 backdrop-blur-md">
             <div className="max-w-3xl mx-auto">
               <div className="flex items-end gap-3">
+
+                {/* Voice Interaction Controls */}
+                <Button
+                  onClick={toggleListening}
+                  variant={isListening ? "destructive" : "secondary"}
+                  className={`h-14 w-14 rounded-[1.25rem] shrink-0 transition-all ${isListening ? "animate-pulse" : ""}`}
+                >
+                  {isListening ? <MicOff size={24} /> : <Mic size={24} />}
+                </Button>
+
+                {isSpeaking && (
+                  <Button
+                    onClick={stopSpeaking}
+                    variant="ghost"
+                    className="h-14 w-14 rounded-[1.25rem] shrink-0 text-primary animate-pulse"
+                  >
+                    <Volume2 size={24} />
+                  </Button>
+                )}
+
                 <Textarea
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Ask me anything..."
+                  placeholder={isListening ? "Listening..." : "Type or speak..."}
                   className="resize-none min-h-[56px] py-4 bg-white/50 dark:bg-black/40 border-white/30 dark:border-white/10 rounded-[1.25rem] focus:ring-2 focus:ring-primary/20 transition-all scrollbar-none"
-                  disabled={isLoading}
+                  disabled={isLoading || isListening}
                 />
                 <Button
-                  onClick={handleSendMessage}
+                  onClick={() => handleSendMessage()}
                   disabled={isLoading || !input.trim()}
                   className="bg-primary text-white h-14 w-14 rounded-[1.25rem] shadow-lg shadow-primary/20 shrink-0"
                 >

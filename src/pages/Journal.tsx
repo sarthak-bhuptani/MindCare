@@ -12,7 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { PlusCircle, Calendar as CalendarIcon, Trash2, Pencil, Save, Brain, LineChart as LineChartIcon, TrendingUp, Info } from "lucide-react";
+import { PlusCircle, Calendar as CalendarIcon, Trash2, Pencil, Save, Brain, LineChart as LineChartIcon, TrendingUp, Info, Mic, MicOff } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
@@ -52,6 +52,51 @@ const Journal = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [editingId, setEditingId] = useState<string | null>(null);
   const [newTag, setNewTag] = useState("");
+  const [isRecording, setIsRecording] = useState(false);
+
+  // Voice to Text Logic
+  const handleVoiceInput = () => {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      toast.error("Your browser doesn't support speech recognition.");
+      return;
+    }
+
+    if (isRecording) {
+      setIsRecording(false);
+      // Logic to stop handled by onend event usually, but we manually toggle for UI
+      return;
+    }
+
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+
+    recognition.onstart = () => {
+      setIsRecording(true);
+      toast.info("Listening... Speak now.");
+    };
+
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setNewEntry(prev => ({ ...prev, content: prev.content + (prev.content ? " " : "") + transcript }));
+      setIsRecording(false);
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error("Speech recognition error", event.error);
+      setIsRecording(false);
+      toast.error("Could not hear you. Please try again.");
+    };
+
+    recognition.onend = () => {
+      setIsRecording(false);
+    };
+
+    recognition.start();
+  };
 
   // Fetch entries from backend
   const fetchEntries = async () => {
@@ -366,9 +411,21 @@ const Journal = () => {
                 </div>
 
                 <div className="flex flex-col gap-2">
-                  <label className="text-sm font-medium">Journal Entry</label>
+                  <div className="flex justify-between items-center">
+                    <label className="text-sm font-medium">Journal Entry</label>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={handleVoiceInput}
+                      className={`gap-2 transition-all ${isRecording ? "bg-red-50 text-red-500 border-red-200 animate-pulse" : ""}`}
+                    >
+                      {isRecording ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                      {isRecording ? "Stop Recording" : "Voice Note"}
+                    </Button>
+                  </div>
                   <Textarea
-                    placeholder="Write your thoughts here..."
+                    placeholder="Write your thoughts here... or click 'Voice Note' to speak."
                     className="min-h-[200px]"
                     value={newEntry.content}
                     onChange={(e) => setNewEntry({ ...newEntry, content: e.target.value })}

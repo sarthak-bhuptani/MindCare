@@ -84,7 +84,7 @@ const Navbar = () => {
         <div className="hidden lg:flex items-center gap-1 flex-1 justify-center px-4">
           {isAuthenticated ? (
             <>
-              <NavItem to="/" icon={Calendar}>Home</NavItem>
+              <NavItem to="/dashboard" icon={Calendar}>Dashboard</NavItem>
               <DropdownMenu>
                 <DropdownMenuTrigger className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-primary outline-none transition-colors">
                   Wellness Tools <ChevronDown size={14} />
@@ -146,6 +146,11 @@ const Navbar = () => {
                   <div className="px-4 py-3 text-xs font-bold uppercase tracking-widest text-primary/70 border-b border-primary/5 mb-2">
                     {user?.name}
                   </div>
+                  <DropdownMenuItem asChild className="p-3 rounded-xl flex items-center gap-2 cursor-pointer transition-colors focus:bg-primary/10">
+                    <Link to="/profile">
+                      <UserIcon size={16} /> Profile & Settings
+                    </Link>
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={logout} className="text-destructive focus:text-destructive focus:bg-destructive/10 p-3 rounded-xl flex items-center gap-2 cursor-pointer transition-colors">
                     <LogOut size={16} /> Logout
                   </DropdownMenuItem>
@@ -201,7 +206,7 @@ const Navbar = () => {
               initial={{ opacity: 0, y: -20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -20, scale: 0.95 }}
-              className="fixed top-24 left-4 right-4 z-40 lg:hidden p-5 rounded-[2.5rem] border border-white/20 bg-background/95 backdrop-blur-3xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)] pointer-events-auto overflow-hidden"
+              className="fixed top-24 left-4 right-4 z-40 lg:hidden p-5 rounded-[2.5rem] border border-white/20 bg-background/95 backdrop-blur-3xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] dark:shadow-[0_20px_50px_rgba(0,0,0,0.6)] pointer-events-auto max-h-[80vh] overflow-y-auto"
             >
               <div className="flex flex-col gap-2 relative z-10">
                 <div className="flex items-center justify-between px-2 mb-4">
@@ -209,7 +214,7 @@ const Navbar = () => {
                 </div>
 
                 <div className="grid grid-cols-1 gap-1">
-                  <Link to="/" className={cn("p-4 rounded-2xl flex items-center gap-4 transition-all active:scale-[0.98]", isActive("/") ? "bg-primary text-white" : "hover:bg-primary/5 text-muted-foreground")}>
+                  <Link to="/dashboard" className={cn("p-4 rounded-2xl flex items-center gap-4 transition-all active:scale-[0.98]", isActive("/dashboard") ? "bg-primary text-white" : "hover:bg-primary/5 text-muted-foreground")}>
                     <HeartPulse size={20} /> <span className="font-semibold">Home Dashboard</span>
                   </Link>
                   <Link to="/resources" className={cn("p-4 rounded-2xl flex items-center gap-4 transition-all active:scale-[0.98]", isActive("/resources") ? "bg-primary text-white" : "hover:bg-primary/5 text-muted-foreground")}>
@@ -252,7 +257,12 @@ const Navbar = () => {
                           <p className="font-bold text-sm">{user?.name}</p>
                         </div>
                       </div>
-                      <Button onClick={logout} variant="outline" className="w-full rounded-2xl border-destructive/20 text-destructive hover:bg-destructive/5 font-bold">
+                      <Link to="/profile">
+                        <Button variant="outline" className="w-full rounded-2xl h-12 mb-3 justify-start font-bold border-primary/20 bg-white/50 dark:bg-black/20">
+                          <UserIcon size={18} className="mr-2" /> Profile & Settings
+                        </Button>
+                      </Link>
+                      <Button onClick={logout} variant="outline" className="w-full rounded-2xl border-destructive/20 text-destructive hover:bg-destructive/5 font-bold mb-2">
                         <LogOut size={16} className="mr-2" /> End Session
                       </Button>
                     </div>

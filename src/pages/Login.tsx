@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Lock, ArrowRight, Sparkles } from "lucide-react";
 import LoginAvatar from "@/components/LoginAvatar";
 import { API_ENDPOINTS } from "@/lib/api-config";
+import { isOnboarded } from "@/lib/onboarding";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -37,7 +38,13 @@ const Login = () => {
             if (response.ok) {
                 login(data.token, data.user);
                 toast.success("Welcome back to SereneMind!");
-                navigate("/journal");
+
+                if (isOnboarded()) {
+                    // Navigate to onboarding to show the full questionnaire for every session as requested
+                    navigate("/onboarding");
+                } else {
+                    navigate("/onboarding");
+                }
             } else {
                 toast.error(data.message || "Invalid credentials");
             }

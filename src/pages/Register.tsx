@@ -12,6 +12,7 @@ import { motion } from "framer-motion";
 import { Mail, Lock, User, ArrowRight, Sparkles } from "lucide-react";
 import LoginAvatar from "@/components/LoginAvatar";
 import { API_ENDPOINTS } from "@/lib/api-config";
+import { isOnboarded } from "@/lib/onboarding";
 
 const Register = () => {
     const [name, setName] = useState("");
@@ -37,8 +38,11 @@ const Register = () => {
 
             if (response.ok) {
                 login(data.token, data.user);
-                toast.success("Welcome! Your journey to mindfulness starts now.");
-                navigate("/journal");
+                if (isOnboarded()) {
+                    navigate("/dashboard");
+                } else {
+                    navigate("/onboarding");
+                }
             } else {
                 toast.error(data.message || "Registration failed");
             }
