@@ -257,11 +257,6 @@ const Navbar = () => {
                           <p className="font-bold text-sm">{user?.name}</p>
                         </div>
                       </div>
-                      <Link to="/profile">
-                        <Button variant="outline" className="w-full rounded-2xl h-12 mb-3 justify-start font-bold border-primary/20 bg-white/50 dark:bg-black/20">
-                          <UserIcon size={18} className="mr-2" /> Profile & Settings
-                        </Button>
-                      </Link>
                       <Button onClick={logout} variant="outline" className="w-full rounded-2xl border-destructive/20 text-destructive hover:bg-destructive/5 font-bold mb-2">
                         <LogOut size={16} className="mr-2" /> End Session
                       </Button>

@@ -222,11 +222,11 @@ const Profile = () => {
                     </div>
 
                     <Tabs defaultValue="profile" className="space-y-6">
-                        <TabsList className="w-full md:w-auto grid grid-cols-2 md:grid-cols-4 h-14 p-1 rounded-2xl bg-secondary/30">
-                            <TabsTrigger value="profile" className="rounded-xl h-12">Profile</TabsTrigger>
-                            <TabsTrigger value="appearance" className="rounded-xl h-12">Appearance</TabsTrigger>
-                            <TabsTrigger value="notifications" className="rounded-xl h-12">Notifications</TabsTrigger>
-                            <TabsTrigger value="data" className="rounded-xl h-12">Data & Privacy</TabsTrigger>
+                        <TabsList className="w-full md:w-auto grid grid-cols-2 md:grid-cols-4 h-auto md:h-14 p-1 rounded-2xl bg-secondary/30 gap-1 md:gap-0">
+                            <TabsTrigger value="profile" className="rounded-xl h-12 data-[state=active]:bg-background data-[state=active]:shadow-sm">Profile</TabsTrigger>
+                            <TabsTrigger value="appearance" className="rounded-xl h-12 data-[state=active]:bg-background data-[state=active]:shadow-sm">Appearance</TabsTrigger>
+                            <TabsTrigger value="notifications" className="rounded-xl h-12 data-[state=active]:bg-background data-[state=active]:shadow-sm">Notifications</TabsTrigger>
+                            <TabsTrigger value="data" className="rounded-xl h-12 data-[state=active]:bg-background data-[state=active]:shadow-sm">Data & Privacy</TabsTrigger>
                         </TabsList>
 
                         {/* PROFILE TAB */}

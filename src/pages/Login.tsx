@@ -40,8 +40,7 @@ const Login = () => {
                 toast.success("Welcome back to SereneMind!");
 
                 if (isOnboarded()) {
-                    // Navigate to onboarding to show the full questionnaire for every session as requested
-                    navigate("/onboarding");
+                    navigate("/dashboard");
                 } else {
                     navigate("/onboarding");
                 }
