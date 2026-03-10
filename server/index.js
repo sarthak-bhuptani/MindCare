@@ -6,6 +6,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
 
 import OpenAI from 'openai';
 
@@ -38,7 +39,7 @@ if (GROQ_API_KEY) {
 
 // Middleware
 app.use(cors({
-    origin: ["https://minddcare.netlify.app", "http://localhost:5173", "http://localhost:8080", "http://localhost:3000"],
+    origin: ["https://minddcare.netlify.app", "http://localhost:5173", "http://localhost:8080", "http://localhost:8081", "http://localhost:8082", "http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
@@ -148,6 +149,8 @@ const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
+    resetOtp: { type: String },
+    resetOtpExpiry: { type: Date },
     createdAt: { type: Date, default: Date.now }
 });
 
@@ -220,6 +223,92 @@ app.post('/api/auth/login', async (req, res) => {
             error: error.message,
             state: mongoose.connection.readyState
         });
+    }
+});
+
+// Configure NodeMailer transporter (will fail gracefully if no credentials)
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER || 'test@example.com',
+        pass: process.env.EMAIL_PASS || 'test'
+    }
+});
+
+app.post('/api/auth/forgot-password', async (req, res) => {
+    const { email } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        // Generate 6 digit OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const otpExpiry = new Date();
+        otpExpiry.setMinutes(otpExpiry.getMinutes() + 15); // OTP valid for 15 mins
+
+        user.resetOtp = otp;
+        user.resetOtpExpiry = otpExpiry;
+        await user.save();
+
+        console.log(`[DEV MODE] OTP for ${email} is: ${otp}`);
+
+        // Try sending email, catch errors if credentials are wrong
+        if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+            try {
+                await transporter.sendMail({
+                    from: process.env.EMAIL_USER,
+                    to: email,
+                    subject: 'MindCare - Password Reset Verification Code',
+                    html: `
+                        <div style="font-family: Arial, sans-serif; text-align: center; max-width: 500px; margin: auto;">
+                            <h2>Password Reset Request</h2>
+                            <p>You requested a password reset. Here is your code:</p>
+                            <h1 style="color: #3b82f6; letter-spacing: 5px;">${otp}</h1>
+                            <p>This code will expire in 15 minutes.</p>
+                            <p>If you did not request this, please ignore this email.</p>
+                        </div>
+                    `
+                });
+            } catch (emailError) {
+                console.error("Failed to send email:", emailError.message);
+                // Return success anyway in development so they can read console
+            }
+        }
+
+        res.json({ message: 'OTP sent successfully to your email' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+app.post('/api/auth/reset-password', async (req, res) => {
+    const { email, otp, newPassword } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (user.resetOtp !== otp) {
+            return res.status(400).json({ message: 'Invalid OTP' });
+        }
+
+        if (new Date() > user.resetOtpExpiry) {
+            return res.status(400).json({ message: 'OTP has expired' });
+        }
+
+        // Hash new password
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+        user.resetOtp = undefined;
+        user.resetOtpExpiry = undefined;
+        await user.save();
+
+        res.json({ message: 'Password reset successful' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 });
 

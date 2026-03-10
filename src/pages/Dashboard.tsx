@@ -60,20 +60,20 @@ const Dashboard = () => {
 
         const pools = {
             morning: {
-                low: ["Slow Stretching", "Hydration + Lemon", "Morning Light (2m)"],
-                balanced: ["Mindful Coffee", "Goal Alignment", "10m Reading"],
-                high: ["Power Workout", "Cold Exposure", "Strategy Planning"]
+                low: ["Gentle Stretching", "Drink a Glass of Water", "Get Some Sunlight (2 mins)"],
+                balanced: ["Enjoy Your Coffee or Tea", "Set One Goal for Today", "Read for 10 mins"],
+                high: ["Quick Workout", "Take a Cool Shower", "Plan Your Day"]
             },
             focus: {
-                Student: ["Active Recall Session", "Note Synthesis", "Flashcard Review"],
-                Professional: ["Priority Matrix Build", "Deep Work Sprint", "Client Sync Prep"],
-                Caregiver: ["Empathy Practice", "Needs Assessment", "Organization Buffer"],
-                Exploring: ["Creative Brainstorm", "Market Research", "Skill Tutorial"]
+                Student: ["Study Session", "Review Notes", "Practice Quiz"],
+                Professional: ["Organize Your Tasks", "Focused Work Time", "Prepare for Meetings"],
+                Caregiver: ["Take a Deep Breath", "Check What You Need", "Organize Your Space"],
+                Exploring: ["Think of New Ideas", "Learn Something New", "Practice a Skill"]
             },
             evening: {
-                low: ["Cozy Reading", "Warm Bath", "Phone-free Zone"],
-                balanced: ["Progress Log", "Tomorrow's Prep", "Light Stretching"],
-                high: ["Network Outreach", "Future Planning", "Skill Mastery"]
+                low: ["Read a Book", "Take a Warm Bath", "Put Phone Away"],
+                balanced: ["Reflect on Your Day", "Prepare for Tomorrow", "Light Stretching"],
+                high: ["Talk to a Friend", "Plan for Tomorrow", "Do a Hobby You Enjoy"]
             }
         };
 
@@ -81,13 +81,13 @@ const Dashboard = () => {
 
         let plan: Task[] = [
             { id: 1, task: `Morning: ${pick(pools.morning[moodLevel as keyof typeof pools.morning])}`, time: "08:30 AM", status: "pending" },
-            { id: 2, task: `Focus: ${pick((pools.focus as any)[role] || ["Main Task"])}`, time: "11:00 AM", status: "pending" },
-            { id: 3, task: moodLevel === 'low' ? "Battery Re-charge: 10m Nap" : "Peak Performance: Bonus Challenge", time: "03:30 PM", status: "pending" },
-            { id: 4, task: `Downtime: ${pick(pools.evening[moodLevel as keyof typeof pools.evening])}`, time: "09:00 PM", status: "pending" }
+            { id: 2, task: `Target: ${pick((pools.focus as any)[role] || ["Main Task"])}`, time: "11:00 AM", status: "pending" },
+            { id: 3, task: moodLevel === 'low' ? "Quick Break: 10 min Nap" : "Bonus: Try a Fun Challenge", time: "03:30 PM", status: "pending" },
+            { id: 4, task: `Evening: ${pick(pools.evening[moodLevel as keyof typeof pools.evening])}`, time: "09:00 PM", status: "pending" }
         ];
 
-        if (challenges.includes("Anxiety")) plan.splice(2, 0, { id: 5, task: "Anxiety Rescue: 4-4-4 Breathing", time: "As Needed", status: "pending" });
-        if (challenges.includes("Sleep")) plan.push({ id: 6, task: "Sleep Optimization: Relaxing Soak", time: "10:00 PM", status: "pending" });
+        if (challenges.includes("Anxiety")) plan.splice(2, 0, { id: 5, task: "Calm Down: Try 4-4-4 Breathing", time: "As Needed", status: "pending" });
+        if (challenges.includes("Sleep")) plan.push({ id: 6, task: "Better Sleep: Relaxing Activity Before Bed", time: "10:00 PM", status: "pending" });
 
         return plan;
     };
@@ -283,7 +283,7 @@ const Dashboard = () => {
                         <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-foreground">
                             {greeting}, <span className="text-primary">{insights?.nickname}</span>
                         </h1>
-                        <p className="text-muted-foreground mt-2 font-medium">Here is your daily wellness overview.</p>
+                        <p className="text-muted-foreground mt-2 font-medium">Here is your daily goals overview.</p>
                     </motion.div>
 
                     <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-wrap gap-3">
@@ -339,14 +339,14 @@ const Dashboard = () => {
                             </div>
                         </motion.div>
 
-                        {/* Wellness Plan Card */}
+                        {/* Daily Goals Card */}
                         <Card className="border-border/50 shadow-xl shadow-slate-200/40 dark:shadow-none rounded-[2rem] bg-card/50 backdrop-blur-sm overflow-hidden">
                             <CardHeader className="p-8 pb-4 flex flex-row items-center justify-between">
                                 <div>
                                     <CardTitle className="text-2xl flex items-center gap-2">
-                                        <Calendar className="text-primary w-5 h-5" /> Wellness Plan
+                                        <Calendar className="text-primary w-5 h-5" /> Daily Goals
                                     </CardTitle>
-                                    <CardDescription>Daily goals synced for a {insights?.role || "user"}.</CardDescription>
+                                    <CardDescription>Simple daily goals for you.</CardDescription>
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <Button

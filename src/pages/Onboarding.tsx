@@ -12,6 +12,7 @@ import {
     Check,
     Sparkles,
     AlertTriangle,
+    HeartPulse,
     Heart,
     Brain,
     Moon,
@@ -162,7 +163,7 @@ const Onboarding = () => {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">What do you do mainly?</Label>
+                                        <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">What do you do?</Label>
                                         <div className="grid grid-cols-2 gap-2">
                                             {["Student", "Professional", "Caregiver", "Exploring"].map((role) => (
                                                 <button
@@ -210,7 +211,7 @@ const Onboarding = () => {
                                         <ShieldCheck size={28} />
                                     </div>
                                     <h1 className="text-xl font-black">Safety First.</h1>
-                                    <p className="text-slate-500 text-xs font-medium italic">"Your well-being is our absolute priority."</p>
+                                    <p className="text-slate-500 text-xs font-medium italic">"Your safety is very important to us."</p>
                                 </div>
 
                                 <div className="space-y-2">
@@ -220,7 +221,7 @@ const Onboarding = () => {
                                     >
                                         <div className="text-left">
                                             <h3 className="font-bold text-sm">I'm feeling okay</h3>
-                                            <p className="text-slate-400 text-[10px]">Proceed to personalizing your dashboard</p>
+                                            <p className="text-slate-400 text-[10px]">Go to my dashboard</p>
                                         </div>
                                         <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center"><ChevronRight size={16} /></div>
                                     </button>
@@ -231,7 +232,7 @@ const Onboarding = () => {
                                     >
                                         <div className="text-left text-red-600 dark:text-red-400">
                                             <h3 className="font-bold text-sm">I need help now</h3>
-                                            <p className="opacity-70 text-[10px]">Access clinical support and helplines</p>
+                                            <p className="opacity-70 text-[10px]">Get help from a doctor or helpline</p>
                                         </div>
                                         <AlertTriangle size={18} />
                                     </button>
@@ -281,7 +282,7 @@ const Onboarding = () => {
                                     </div>
 
                                     <div className="space-y-3 pt-2">
-                                        <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">What's on your mind today? (Pick any)</Label>
+                                        <Label className="text-[10px] font-bold uppercase tracking-widest text-slate-400">What is on your mind? (Pick any)</Label>
                                         <div className="flex flex-wrap gap-1.5">
                                             {[
                                                 { tag: "Studies", icon: <BookOpen size={12} /> },
@@ -317,7 +318,7 @@ const Onboarding = () => {
                             <motion.div key="motivation" custom={direction} variants={variants} initial="enter" animate="center" exit="exit" className="space-y-6">
                                 <div className="space-y-1">
                                     <h1 className="text-2xl font-black">Why are you here?</h1>
-                                    <p className="text-sm text-slate-500 font-medium font-serif italic text-pretty">"knowing your goal helps us help you."</p>
+                                    <p className="text-sm text-slate-500 font-medium font-serif italic text-pretty">"knowing your goal helps us guide you."</p>
                                 </div>
 
                                 <div className="grid grid-cols-1 gap-2">
@@ -350,7 +351,7 @@ const Onboarding = () => {
                             <motion.div key="commitment" custom={direction} variants={variants} initial="enter" animate="center" exit="exit" className="space-y-6">
                                 <div className="space-y-1">
                                     <h1 className="text-2xl font-black">How much time do you have?</h1>
-                                    <p className="text-sm text-slate-500 font-medium">We can adapt to your schedule.</p>
+                                    <p className="text-sm text-slate-500 font-medium">We will fit into your day.</p>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-2">
@@ -383,7 +384,7 @@ const Onboarding = () => {
                             <motion.div key="preferences" custom={direction} variants={variants} initial="enter" animate="center" exit="exit" className="space-y-6">
                                 <div className="space-y-1">
                                     <h1 className="text-2xl font-black">How should we help you?</h1>
-                                    <p className="text-sm text-slate-500 font-medium italic text-balance font-serif">"Setting things up just for you."</p>
+                                    <p className="text-sm text-slate-500 font-medium italic text-balance font-serif">"Making the app work for you."</p>
                                 </div>
 
                                 <div className="bg-white dark:bg-slate-900 border border-slate-200/60 p-6 rounded-3xl space-y-8">
@@ -433,7 +434,7 @@ const Onboarding = () => {
                             <motion.div key="goals" custom={direction} variants={variants} initial="enter" animate="center" exit="exit" className="space-y-6">
                                 <div className="space-y-1">
                                     <h1 className="text-2xl font-black italic">What helps you relax best?</h1>
-                                    <p className="text-sm text-slate-500 font-medium">Pick the one that sounds best to you.</p>
+                                    <p className="text-sm text-slate-500 font-medium">Pick the one you like best.</p>
                                 </div>
 
                                 <div className="grid grid-cols-2 gap-2">
@@ -465,18 +466,18 @@ const Onboarding = () => {
 
                         {currentStep === "complete" && (
                             <motion.div key="complete" custom={direction} variants={variants} initial="enter" animate="center" exit="exit" className="text-center space-y-10">
-                                <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="w-20 h-20 bg-primary/10 rounded-[2rem] mx-auto flex items-center justify-center border-2 border-primary/10 shadow-sm relative">
-                                    <Star className="w-10 h-10 text-primary fill-primary" />
-                                    <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }} className="absolute inset-[-4px] border border-dashed border-primary/20 rounded-full" />
+                                <motion.div initial={{ scale: 0.9 }} animate={{ scale: 1 }} className="w-24 h-24 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-full mx-auto flex items-center justify-center border-4 border-white shadow-xl relative">
+                                    <HeartPulse className="w-12 h-12 text-primary" />
+                                    <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }} className="absolute inset-[-8px] border-2 border-dashed border-primary/30 rounded-full" />
                                 </motion.div>
 
-                                <div className="space-y-1">
-                                    <h1 className="text-3xl font-black font-serif italic">Pure Sync.</h1>
-                                    <p className="text-slate-400 text-xs font-medium">"Your space is ready for your unique journey."</p>
+                                <div className="space-y-2">
+                                    <h1 className="text-3xl font-black bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">All Set!</h1>
+                                    <p className="text-slate-400 text-xs font-medium">"Your personal space is ready."</p>
                                 </div>
 
-                                <div className="bg-white dark:bg-slate-900 border border-slate-100 p-8 rounded-[2rem] text-left space-y-6 shadow-sm relative overflow-hidden">
-                                    <div className="absolute top-[-20%] right-[-10%] opacity-[0.03] text-primary rotate-12"><Star size={200} /></div>
+                                <div className="bg-white dark:bg-slate-900 border-2 border-primary/10 p-8 rounded-[2rem] text-left space-y-6 shadow-lg shadow-primary/5 relative overflow-hidden">
+                                    <div className="absolute top-[-20%] right-[-10%] opacity-[0.05] text-primary rotate-12"><HeartPulse size={200} /></div>
                                     {[
                                         { k: "Individual", v: formData.nickname, icon: <User size={14} className="text-slate-300" /> },
                                         { k: "Primary Goal", v: formData.motivation, icon: <Target size={14} className="text-slate-300" /> },
