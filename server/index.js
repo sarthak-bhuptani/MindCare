@@ -271,13 +271,15 @@ app.post('/api/auth/forgot-password', async (req, res) => {
                         </div>
                     `
                 });
+                return res.json({ message: 'OTP sent successfully to your email' });
             } catch (emailError) {
                 console.error("Failed to send email:", emailError.message);
-                // Return success anyway in development so they can read console
+                return res.status(500).json({ message: 'Failed to send OTP email due to server configuration. Check email credentials.' });
             }
+        } else {
+            console.warn("EMAIL_USER or EMAIL_PASS not set in environment variables.");
+            return res.status(500).json({ message: 'Email service is not configured on the server.' });
         }
-
-        res.json({ message: 'OTP sent successfully to your email' });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -398,6 +400,11 @@ app.put('/api/journal/:id', authenticateToken, async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
     console.log(`Server is running on port ${PORT}`);
+    try {
+        await connectDB();
+    } catch (err) {
+        console.log("Initial DB connection failed. Will retry on first API request.");
+    }
 });

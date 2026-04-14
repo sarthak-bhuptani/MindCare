@@ -82,118 +82,148 @@ const Navbar = () => {
         <div className="flex-1 lg:hidden" />
 
         {/* Desktop Links */}
-        {!isOnboardingPage && (
-          <div className="hidden lg:flex items-center gap-1 flex-1 justify-center px-4">
-            {isAuthenticated ? (
-              <>
-                <NavItem to="/dashboard" icon={Calendar}>Dashboard</NavItem>
-                <DropdownMenu>
-                  <DropdownMenuTrigger className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-primary outline-none transition-colors">
-                    Wellness Tools <ChevronDown size={14} />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="p-2 w-56 rounded-2xl border border-primary/10 bg-background/80 backdrop-blur-xl shadow-2xl">
-                    <DropdownMenuItem asChild className="rounded-xl focus:bg-primary/10 cursor-pointer">
-                      <Link to="/breathing" className="flex items-center gap-3 p-3 w-full">
-                        <div className="p-1.5 bg-blue-100 dark:bg-blue-900/40 rounded-lg">
-                          <Wind size={16} className="text-blue-500" />
-                        </div>
-                        <span className="font-medium text-foreground">Breathing</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild className="rounded-xl focus:bg-primary/10 cursor-pointer">
-                      <Link to="/journal" className="flex items-center gap-3 p-3 w-full">
-                        <div className="p-1.5 bg-pink-100 dark:bg-pink-900/40 rounded-lg">
-                          <BookHeart size={16} className="text-pink-500" />
-                        </div>
-                        <span className="font-medium text-foreground">Mood Journal</span>
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild className="rounded-xl focus:bg-primary/10 cursor-pointer">
-                      <Link to="/mindgame" className="flex items-center gap-3 p-3 w-full">
-                        <div className="p-1.5 bg-purple-100 dark:bg-purple-900/40 rounded-lg">
-                          <Gamepad2 size={16} className="text-purple-500" />
-                        </div>
-                        <span className="font-medium text-foreground">Mind Games</span>
-                      </Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-                <NavItem to="/resources" icon={BookHeart}>Resources</NavItem>
-              </>
-            ) : (
-              <div className="flex items-center gap-6">
-                <NavItem to="/">Home</NavItem>
-                <NavItem to="/resources">Resources</NavItem>
-              </div>
-            )}
-          </div>
-        )}
+        <div className="hidden lg:flex items-center gap-1 flex-1 justify-center px-4">
+          {isOnboardingPage ? (
+            <div className="flex items-center px-5 py-2 rounded-full bg-primary/5 border border-primary/10">
+              <span className="text-sm font-bold tracking-wide bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                {location.pathname === '/onboarding' ? 'Personalizing Your Experience' : 'Your Wellness Journey'}
+              </span>
+            </div>
+          ) : isAuthenticated ? (
+            <>
+              <NavItem to="/dashboard" icon={Calendar}>Dashboard</NavItem>
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex items-center gap-1 px-4 py-2 text-sm font-medium text-muted-foreground hover:text-primary outline-none transition-colors">
+                  Wellness Tools <ChevronDown size={14} />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="p-2 w-56 rounded-2xl border border-primary/10 bg-background/80 backdrop-blur-xl shadow-2xl">
+                  <DropdownMenuItem asChild className="rounded-xl focus:bg-primary/10 cursor-pointer">
+                    <Link to="/breathing" className="flex items-center gap-3 p-3 w-full">
+                      <div className="p-1.5 bg-blue-100 dark:bg-blue-900/40 rounded-lg">
+                        <Wind size={16} className="text-blue-500" />
+                      </div>
+                      <span className="font-medium text-foreground">Breathing</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="rounded-xl focus:bg-primary/10 cursor-pointer">
+                    <Link to="/journal" className="flex items-center gap-3 p-3 w-full">
+                      <div className="p-1.5 bg-pink-100 dark:bg-pink-900/40 rounded-lg">
+                        <BookHeart size={16} className="text-pink-500" />
+                      </div>
+                      <span className="font-medium text-foreground">Mood Journal</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild className="rounded-xl focus:bg-primary/10 cursor-pointer">
+                    <Link to="/mindgame" className="flex items-center gap-3 p-3 w-full">
+                      <div className="p-1.5 bg-purple-100 dark:bg-purple-900/40 rounded-lg">
+                        <Gamepad2 size={16} className="text-purple-500" />
+                      </div>
+                      <span className="font-medium text-foreground">Mind Games</span>
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <NavItem to="/resources" icon={BookHeart}>Resources</NavItem>
+            </>
+          ) : (
+            <div className="flex items-center gap-6">
+              <NavItem to="/">Home</NavItem>
+              <NavItem to="/resources">Resources</NavItem>
+            </div>
+          )}
+        </div>
 
         {/* Desktop Actions */}
-        {!isOnboardingPage && (
-          <div className="hidden lg:flex items-center gap-3">
-            {isAuthenticated ? (
-              <div className="flex items-center gap-3 border-l pl-4 border-border/50">
-                <SOSModal />
-                <Link to="/chat">
-                  <Button size="sm" className="rounded-xl px-5 bg-gradient-to-r from-primary to-secondary hover:translate-y-[-1px] active:translate-y-[0px] transition-all text-white shadow-lg shadow-primary/10 border-none">
-                    <MessageSquare size={16} className="mr-2" /> AI Chat
+        <div className="hidden lg:flex items-center gap-3">
+          {isOnboardingPage ? (
+            <div className="flex items-center gap-3">
+              <Link to="/">
+                <Button variant="ghost" size="sm" className="rounded-xl px-5 font-medium">
+                  Home
+                </Button>
+              </Link>
+              {isAuthenticated && (
+                <Button onClick={logout} size="sm" variant="ghost" className="rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/10">
+                  <LogOut size={16} className="mr-2" /> Logout
+                </Button>
+              )}
+            </div>
+          ) : isAuthenticated ? (
+            <div className="flex items-center gap-3 border-l pl-4 border-border/50">
+              <SOSModal />
+              <Link to="/chat">
+                <Button size="sm" className="rounded-xl px-5 bg-gradient-to-r from-primary to-secondary hover:translate-y-[-1px] active:translate-y-[0px] transition-all text-white shadow-lg shadow-primary/10 border-none">
+                  <MessageSquare size={16} className="mr-2" /> AI Chat
+                </Button>
+              </Link>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="rounded-xl bg-accent/30 hover:bg-accent/50 transition-colors">
+                    <UserIcon size={20} />
                   </Button>
-                </Link>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="rounded-xl bg-accent/30 hover:bg-accent/50 transition-colors">
-                      <UserIcon size={20} />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-52 p-2 rounded-2xl border border-primary/10 bg-background/80 backdrop-blur-xl shadow-2xl">
-                    <div className="px-4 py-3 text-xs font-bold uppercase tracking-widest text-primary/70 border-b border-primary/5 mb-2">
-                      {user?.name}
-                    </div>
-                    <DropdownMenuItem asChild className="p-3 rounded-xl flex items-center gap-2 cursor-pointer transition-colors focus:bg-primary/10">
-                      <Link to="/profile">
-                        <UserIcon size={16} /> Profile & Settings
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={logout} className="text-destructive focus:text-destructive focus:bg-destructive/10 p-3 rounded-xl flex items-center gap-2 cursor-pointer transition-colors">
-                      <LogOut size={16} /> Logout
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2">
-                <Link to="/login">
-                  <Button variant="ghost" size="sm" className="rounded-xl px-5">Login</Button>
-                </Link>
-                <Link to="/register">
-                  <Button size="sm" className="rounded-xl px-6 bg-primary text-white hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary/20">
-                    Sign Up
-                  </Button>
-                </Link>
-              </div>
-            )}
-          </div>
-        )}
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-52 p-2 rounded-2xl border border-primary/10 bg-background/80 backdrop-blur-xl shadow-2xl">
+                  <div className="px-4 py-3 text-xs font-bold uppercase tracking-widest text-primary/70 border-b border-primary/5 mb-2">
+                    {user?.name}
+                  </div>
+                  <DropdownMenuItem asChild className="p-3 rounded-xl flex items-center gap-2 cursor-pointer transition-colors focus:bg-primary/10">
+                    <Link to="/profile">
+                      <UserIcon size={16} /> Profile & Settings
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={logout} className="text-destructive focus:text-destructive focus:bg-destructive/10 p-3 rounded-xl flex items-center gap-2 cursor-pointer transition-colors">
+                    <LogOut size={16} /> Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Link to="/login">
+                <Button variant="ghost" size="sm" className="rounded-xl px-5">Login</Button>
+              </Link>
+              <Link to="/register">
+                <Button size="sm" className="rounded-xl px-6 bg-primary text-white hover:scale-105 active:scale-95 transition-all shadow-lg shadow-primary/20">
+                  Sign Up
+                </Button>
+              </Link>
+            </div>
+          )}
+        </div>
 
         {/* Mobile Toggle */}
-        {!isOnboardingPage && (
-          <div className="lg:hidden flex items-center gap-2">
-            {isAuthenticated && (
-              <div className="flex items-center gap-1 sm:gap-2">
-                <SOSModal />
-                <Link to="/chat">
-                  <Button size="icon" className="h-9 w-9 rounded-xl bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/10">
-                    <MessageSquare size={18} />
+        <div className="lg:hidden flex items-center gap-2">
+          {isOnboardingPage ? (
+             <div className="flex items-center gap-2">
+                 <Link to="/">
+                   <Button variant="ghost" size="icon" className="h-9 w-9 rounded-xl bg-accent/30 hover:bg-accent/50 transition-colors flex items-center justify-center">
+                     <span className="text-sm">🏠</span>
+                   </Button>
+                 </Link>
+                {isAuthenticated && (
+                  <Button onClick={logout} variant="ghost" size="icon" className="h-9 w-9 rounded-xl bg-destructive/10 text-destructive hover:bg-destructive/20 transition-colors">
+                    <LogOut size={16} />
                   </Button>
-                </Link>
-              </div>
-            )}
-            <Button variant="ghost" size="icon" onClick={() => setIsOpen(!isOpen)} className="h-9 w-9 rounded-xl bg-accent/30 hover:bg-accent/50 transition-colors">
-              {isOpen ? <X size={20} /> : <Menu size={20} />}
-            </Button>
-          </div>
-        )}
+                )}
+             </div>
+          ) : (
+            <>
+              {isAuthenticated && (
+                <div className="flex items-center gap-1 sm:gap-2">
+                  <SOSModal />
+                  <Link to="/chat">
+                    <Button size="icon" className="h-9 w-9 rounded-xl bg-gradient-to-r from-primary to-secondary text-white shadow-lg shadow-primary/10">
+                      <MessageSquare size={18} />
+                    </Button>
+                  </Link>
+                </div>
+              )}
+              <Button variant="ghost" size="icon" onClick={() => setIsOpen(!isOpen)} className="h-9 w-9 rounded-xl bg-accent/30 hover:bg-accent/50 transition-colors">
+                {isOpen ? <X size={20} /> : <Menu size={20} />}
+              </Button>
+            </>
+          )}
+        </div>
       </motion.nav>
 
       {/* Mobile Menu */}
@@ -321,7 +351,7 @@ const Navbar = () => {
                   <div className="mt-auto space-y-4 animate-in slide-in-from-bottom-8 fade-in duration-700 delay-200">
                     <div className="p-6 rounded-[2.5rem] bg-secondary/30 border border-border/50 text-center space-y-4">
                       <div className="w-14 h-14 bg-primary/10 rounded-full flex items-center justify-center mx-auto text-primary mb-2">
-                        <Sparkles size={24} />
+                        <HeartPulse size={24} />
                       </div>
                       <div>
                         <h3 className="font-bold text-lg">Start your journey</h3>
